@@ -1,0 +1,175 @@
+#include<stdio.h>
+
+int temp[4][4],consist[4][4]={0},tmp[16],num=0,blank=0,scale,todeal,hang,lie;
+
+int hangshu(int n){
+    int i,j,con=0;
+    for(i=0;i<scale;i++){
+        for(j=0;j<scale;j++){
+            if(temp[i][j]==1){
+                con++;
+            }
+            if(con==n){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+int lieshu(int n){
+    int i,j,con=0;
+    for(i=0;i<scale;i++){
+        for(j=0;j<scale;j++){
+            if(temp[i][j]==1){
+                con++;
+            }
+            if(con==n){	
+                return j;
+            }
+        }
+    }
+    return -1;
+}
+
+void hanglie(int n){
+	int con=0;
+	for(int i=0;i<scale;i++){
+		for(int j=0;j<scale;j++){
+			if(consist[i][j]==1){
+				con++;
+			}
+			if(con==n){
+				hang=i;
+				lie=j;
+				return;
+			}
+		}
+	}
+}
+
+int ensure(){
+    int i,j,it,jt;
+    int up=-1,down=scale,left=-1,right=scale;
+    for(i=0;i<scale;i++){
+        for(j=0;j<scale;j++){
+        	up=-1;
+			down=scale;
+			left=-1;
+			right=scale;
+            if(temp[i][j]==2){
+                for(it=0;it<scale;it++){
+                    if(temp[it][j]==0&&it<i){
+                        up=it;
+                    }
+                    if(temp[it][j]==0&&it>i){
+                        down=it;
+                    }
+                }
+                for(int pre=up+1;pre<i;pre++){
+                    if(temp[pre][j]==2){
+                        return 0;
+                    }
+                }
+                for(int post=i+1;post<down;post++){
+                    if(temp[post][j]==2){
+                        return 0;
+                    }
+                }
+                for(jt=0;jt<scale;jt++){
+                    if(temp[i][jt]==0&&jt<j){
+                        left=jt;
+                    }
+                    if(temp[i][jt]==0&&jt>j){
+                        right=jt;
+                    }
+                }
+                for(int pre=left+1;pre<j;pre++){
+                    if(temp[i][pre]==2){
+                        return 0;
+                    }
+                }
+                for(int post=j+1;post<right;post++){
+                    if(temp[i][post]==2){
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+void dealwithback(){
+	int l;
+    
+    if(todeal>blank){
+        int tempnum=0;
+        if(ensure()==0){
+        	return;
+		}
+        for(int in=0;in<scale;in++){
+            for(int jn=0;jn<scale;jn++){
+                if(temp[in][jn]==2){
+                    tempnum++;
+                }
+            }
+        }//printf("%d\n",tempnum);
+        if(tempnum==8){
+        	for(int i=0;i<scale;i++){
+        	for(int j=0;j<scale;j++){
+        		printf("%d ",temp[i][j]);
+			}
+			printf("\n");
+		}
+		printf("haha\n");
+			}
+        if(num<tempnum){
+        	
+            num=tempnum;
+            
+        }
+        return;
+    }
+    for(l=2;l>=1;l--){
+    	hanglie(todeal);
+        temp[hang][lie]=l;
+
+        todeal++;
+        dealwithback();
+        todeal--;
+    }
+    return;
+}
+
+int main(){
+    char ch,put[10];
+    int i,j;
+    while(scanf("%d",&scale)!=EOF){
+    	if(scale==0){
+    		return 0;
+		}
+    	blank=0;
+    	getchar();
+        for(i=0;i<scale;i++){
+        	scanf("%s",put);
+            for(j=0;j<scale;j++){
+                ch=put[j];
+                if(ch=='.'){
+                    consist[i][j]=1;
+                    temp[i][j]=1;
+                    blank++;
+                }
+                else if(ch=='X'){
+                    consist[i][j]=0;
+                    temp[i][j]=0;
+                }
+            }
+            //getchar();
+        }
+        todeal=1;
+        num=0;
+        dealwithback();
+        printf("%d\n",num);
+    }
+}

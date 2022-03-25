@@ -1,0 +1,127 @@
+
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int a = 0, b = 0, len, ex = 0, num = 0;
+char s1[100], s2[100];
+int way[100];
+
+struct snode {
+	char str[100];
+	int top;
+	int size;
+};
+typedef struct snode *stack;
+
+int isempty(stack s) {
+	if (s->top == -1) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+int push(stack s, char ch) {
+	if (s->top < s->size) {
+		s->top++;
+		s->str[s->top] = ch;
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+char pop(stack s) {
+	char c;
+	if (s->top == -1) {
+		return '#';
+	}
+	else {
+		c = s->str[s->top--];
+		return c;
+	}
+}
+
+void wingback() {
+	if (a == 2 * len) {
+		stack s = (stack)malloc(sizeof(struct snode));
+		s->size = 10000;
+		s->top = -1;
+		int judge = 1, otime = 0;
+		char tmp;
+		b = 0;
+		int ns1 = 0;
+		for (int i = 0; i <= 2 * len - 1; i++) {
+			if (way[i] == 1 && ns1 < len) {
+				push(s, s1[ns1]);
+				ns1++;
+			}
+			else if (way[i] == 2) {
+				otime++;
+				tmp = pop(s);
+				if (tmp == '#') {
+					judge = 0;
+					break;
+				}
+				else {
+					if (tmp == s2[b]) {
+						b++;
+					}
+					else {
+						judge = 0;
+						break;
+					}
+				}
+			}
+			else {
+				judge = 0;
+				break;
+			}
+		}
+		if (judge == 0 || otime < len) {
+			return;
+		}
+		else {
+			for (int i = 0; i <= 2 * len - 1; i++) {
+				if (way[i] == 1) {
+					printf("i ");
+				}
+				else if (way[i] == 2) {
+					printf("o ");
+				}
+			}
+			printf("\n");
+		}
+		return;
+	}
+
+	for (int i = 1; i <= 2; i++) {
+		way[a] = i;
+		a++;
+		wingback();
+		a--;
+	}
+}
+
+int main() {
+
+
+	while(scanf("%s",s1)!=EOF){
+	scanf("%s", s2);
+	a = 0;
+	b = 0;
+
+	len = strlen(s1);
+	if (len != strlen(s2)) {
+		printf("[\n]\n");
+		continue;
+	}
+	printf("[\n");
+	wingback();
+	printf("]\n");
+	}
+}

@@ -1,0 +1,68 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include<stdio.h>
+#include<string.h>
+
+int k, len;
+char pt[100], ct[100];
+int pc[100], cc[100];
+char *pts = pt, *cts = ct;
+
+int mod(int a, int b) {
+	while (a < 0) {
+		a = a + b;
+	}
+	return a % b;
+}
+
+void tran(int i) {
+	int n = len;
+	int j;
+	int tmp;
+	tmp = cc[i] + i;
+	while (tmp > 27) {
+		tmp = tmp - 28;
+	}
+	pc[k * i % n] = tmp;
+}
+
+int main() {
+	int i;
+	while (1) {
+		scanf("%d", &k);
+		if (k == 0) {
+			break;
+		}
+		scanf("%s", cts);
+		len = strlen(cts);
+		for (i = 0; i < len; i++) {
+			if (ct[i] == '_') {
+				cc[i] = 0;
+			}
+			else if (ct[i] == '.') {
+				cc[i] = 27;
+			}
+			else {
+				cc[i] = ct[i] - 'a' + 1;
+			}
+		}
+		for (i = 0; i < len; i++) {
+			tran(i);
+		}
+		for (i = 0; i < len; i++) {
+			if (pc[i] == 0) {
+				pt[i] = '_';
+			}
+			else if (pc[i] == 27) {
+				pt[i] = '.';
+			}
+			else {
+				pt[i] = 'a' + pc[i] - 1;
+			}
+		}
+		for (i = 0; i < len; i++) {
+			printf("%c", pt[i]);
+		} // do not use {printf("%s\n",pts);}
+		printf("\n");
+	}
+}

@@ -1,0 +1,31 @@
+#include<stdio.h>
+int main(){
+    int a,b,n;
+    while(scanf("%d %d %d",&a,&b,&n)!=EOF){
+        if(a==n){
+            printf("fill A\n");
+            printf("pour A B\n");
+            printf("success\n");
+            continue;
+        }
+        else if(b==n){
+            printf("fill B\n");
+            printf("success\n");
+            continue;
+        }
+        else{
+            int t=0;
+            while(t!=n){
+                t=t+a;
+                printf("fill A\n");
+                printf("pour A B\n");
+                if(t>b){
+                    t=t-b;
+                    printf("empty B\n");
+                    printf("pour A B\n");
+                }
+            }
+            printf("success\n");
+        }
+    }
+}

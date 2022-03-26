@@ -1,0 +1,14 @@
+#include<stdio.h>
+int main() {
+	double x, result,a;
+	int k, n;
+	for (x = 0; x <= 2.000; x = x + 0.001) {
+		a = 1.000 - x;
+		result = 0;
+		for (int i = 1; i < 10002; i++) {
+			result = result + 1.00 / (i*(i + 1)*(i + x));
+		}
+		result = result*a + 1.00*a / (2.00 * 10002 * 10002)+1.0000;
+		printf("%5.3f %16.12f\n", x, result);
+	}
+}
